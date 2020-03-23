@@ -26,10 +26,9 @@ An API server and it's development framework which support cross-platform commun
 * **Server side**
 
 1. Define API protocol
-	
-	```java
-	@Service
-	public interface SimpleProtocol extends Protocol {
+```java
+@Service
+public interface SimpleProtocol extends Protocol {
 	/**
 	 * Echo received message. 
 	 * @param msg The message to be echo.
@@ -45,54 +44,62 @@ An API server and it's development framework which support cross-platform commun
 	 * @throws IOException
 	 */
 	public byte[] echo2(byte[] msg) throws IOException, RpcException;
-	 }
-	 
-	```
+} 
+```
 1. Implements API protocol
-
-	```java
-	public class SimpleService implements SimpleProtocol {
-
+```java
+public class SimpleService implements SimpleProtocol {
 	@Override
 	public String echo(final String msg) throws RpcException {
 		return msg;
-	}
-    
+	}  
 	@Override
 	public byte[] echo2(byte[] msg) throws RpcException {
 		return msg;
 	}
 }
-
-	```
-
+```
 1. Start the server and register service.
 
-	```java
-	public static void main(final String[] args)
-			throws Exception {
-		final RaysonServer server = new RaysonServer(8080);
-		server.registerService(new SimpleService());
-		server.start();
-	}
-	```
+```java
+public static void main(final String[] args) throws Exception {
+	final RaysonServer server = new RaysonServer(8080);
+	server.registerService(new SimpleService());
+	server.start();
+}
+```
 * **Client side**
+1. Java client RPC invoing
 
 ```java
-		public static void main(final String[] args) throws Exception {
-        final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
-		SimpleProtocol simpleProtocol = Rayson.createProxy(serverAddr, SimpleProtocol.class);
-		try {
-			String echoMsg = simpleProtocol.echo("Hello World");
-			System.out.println(echoMsg);
-		} catch (IOException e) {
-			System.err.println("Network error occurred");
-		} catch (RpcException e) {
-			System.err.println("Invoking RPC got logic error: error_code: " + e.getCode() + " error_message: " + e.getMessage());
-		}
+public static void main(final String[] args) throws Exception {
+	final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
+	SimpleProtocol simpleProtocol = Rayson.createProxy(serverAddr, SimpleProtocol.class);
+	try {
+		String echoMsg = simpleProtocol.echo("Hello World");
+		System.out.println(echoMsg);
+	} catch (IOException e) {
+		System.err.println("Network error occurred");
+	} catch (RpcException e) {
+		System.err.println("Invoking RPC got logic error: error_code: " + e.getCode() + " error_message: " + e.getMessage());
 	}
-	
-	```
+}	
+```
+
+1.  Bash script invoking by curl
+```bash
+curl -v "http://localhost:8080/org.rayson.demo.simple.api.SimpleProtocol/echo?Hello%20World"
+> GET /org.rayson.demo.simple.api.SimpleProtocol/echo?msg=Hello%20World HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< Content-Type: application/json; charset=UTF-8
+< Content-Length: 13
+<
+"Hello World"
+```
 
 # Performance table
 Rayson server performance testing.
@@ -114,7 +121,6 @@ Memory: 8 GB 1867 MHz LPDDR3
 |  1      |   100000         |      7576     |
 |  5      |   100000         |      3968     |
 |  50     |   100000         |      521      |
-
 
 * * *
 <center>Copyright Creativor Studio&copy; 2020</center>

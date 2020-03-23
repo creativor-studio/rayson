@@ -26,10 +26,9 @@
 * **服务器端**
 
 1. 定义API协议
-
-	```java
-	@Service
-	public interface SimpleProtocol extends Protocol {
+```java
+@Service
+public interface SimpleProtocol extends Protocol {
 	/**
 	 * Echo received message. 
 	 * @param msg The message to be echo.
@@ -45,54 +44,61 @@
 	 * @throws IOException
 	 */
 	public byte[] echo2(byte[] msg) throws IOException, RpcException;
-	 }
-	 
-	```
+}
+```
 1. 实现API协议
-
-	```java
-	public class SimpleService implements SimpleProtocol {
-
+```java
+public class SimpleService implements SimpleProtocol {
 	@Override
 	public String echo(final String msg) throws RpcException {
 		return msg;
 	}
-
 	@Override
 	public byte[] echo2(byte[] msg) throws RpcException {
 		return msg;
 	}
 }
-	
-	```
+```
 1. 启动服务器并注册服务
-
-	```java
-	public static void main(final String[] args)
-			throws Exception {
-		final RaysonServer server = new RaysonServer(8080);
-		server.registerService(new SimpleService());
-		server.start();
-	}
-	
-	```
+```java
+public static void main(final String[] args) throws Exception {
+	final RaysonServer server = new RaysonServer(8080);
+	server.registerService(new SimpleService());
+	server.start();
+}
+```
 * **客户端**
+1. Java客户端 RPC 调用
 
-	```java
-		public static void main(final String[] args) throws Exception {
-        final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
-		SimpleProtocol simpleProtocol = Rayson.createProxy(serverAddr, SimpleProtocol.class);
-		try {
-			String echoMsg = simpleProtocol.echo("Hello World");
-			System.out.println(echoMsg);
-		} catch (IOException e) {
-			System.err.println("Network error occurred");
-		} catch (RpcException e) {
-			System.err.println("Invoking RPC got logic error: error_code: " + e.getCode() + " error_message: " + e.getMessage());
-		}
+```java
+public static void main(final String[] args) throws Exception {
+	final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
+	SimpleProtocol simpleProtocol = Rayson.createProxy(serverAddr, SimpleProtocol.class);
+	try {
+		String echoMsg = simpleProtocol.echo("Hello World");
+		System.out.println(echoMsg);
+	} catch (IOException e) {
+		System.err.println("Network error occurred");
+	} catch (RpcException e) {
+		System.err.println("Invoking RPC got logic error: error_code: " + e.getCode() + " error_message: " + e.getMessage());
 	}
-	
-	```
+}	
+```
+
+1.  Bash脚本使用curl调用
+```bash
+curl -v "http://localhost:8080/org.rayson.demo.simple.api.SimpleProtocol/echo?Hello%20World"
+> GET /org.rayson.demo.simple.api.SimpleProtocol/echo?msg=Hello%20World HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.64.1
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< Content-Type: application/json; charset=UTF-8
+< Content-Length: 13
+<
+"Hello World"
+```
 
 # 性能表格
 Rayson server 性能测试.

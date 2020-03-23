@@ -32,6 +32,8 @@ public class HttpServerRequestImpl extends HttpAbstractMessage<HttpRequestLine> 
 	private String characterEncoding;
 	private String contentType;
 
+	private static final HttpContentType DEFAULT_CONTENT_TYPE = HttpContentType.FORM_URLENCODED;
+
 	/**
 	 * Constructor a new instance with associated connection.
 	 * 
@@ -118,7 +120,8 @@ public class HttpServerRequestImpl extends HttpAbstractMessage<HttpRequestLine> 
 	private void parseContentType() {
 		// Default value.
 		characterEncoding = HttpMessage.CHARSET.name();
-		contentType = HttpContentType.JSON.typeName();
+
+		contentType = DEFAULT_CONTENT_TYPE.typeName();
 
 		HttpHeader contentHeader = getHeader(HttpConstants.CONTENT_TYPE_HEADER_NAME);
 		if (contentHeader != null) {
