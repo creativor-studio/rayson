@@ -1,0 +1,52 @@
+pybuddyDX by Peter D'Hoye
+http://code.google.com/p/pybuddy-dx/
+
+Follow these steps to get pybuddyDX up and running:
+
+
+1) Install dependencies: python v2.3 or higher, python-usb:
+2) Edit the pybuddy.cfg if required (change at least the username)
+
+
+=> To launch the daemon:
+
+		$ sudo ./pybuddyDX.py 
+		2010-01-16 01:58:00,216 INFO     Searching e-buddy...
+		2010-01-16 01:58:00,668 INFO     DX e-buddy found!
+		2010-01-16 01:58:01,282 INFO     Starting daemon...
+
+=> To test:
+
+		$ echo 00 | nc -q0 -u localhost 8888
+
+Where you can replace the 00 with any number between 00 and 25. 17 turns all effects off.
+Effects 18 to 25 last until turned off again, the others stop themselves.
+
+Here's a quick list of the commands, a more complete description will follow later
+
+GLADNESS =			00
+FEAR =				01
+FIZZ =				02
+PLEASANTSURPRISE =	03
+GRIEF = 			04
+FURY = 				05
+QUELL = 			06
+REDHEAD = 			07
+GREENHEAD = 		08
+BLUEHEAD = 			09
+YELLOWHEAD =		10
+BLAME = 			11
+BLUEGREENHEAD =		12
+WHITEHEAD = 		13
+HEART = 			14
+WINGS = 			15
+BODY = 				16
+NOEFFECT = 			17
+ONLINE = 			18
+BUSY = 				19
+DAZE = 				20
+BACKSOON = 			21
+AWAY = 				22
+PHONE = 			23
+LUNCH = 			24
+OFFLINE = 			25

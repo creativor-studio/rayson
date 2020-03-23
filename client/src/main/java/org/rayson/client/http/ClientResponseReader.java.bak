@@ -1,0 +1,265 @@
+
+package org.rayson.client.http;
+
+import java.io.EOFException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.rayson.api.client.HttpClientResponse;
+import org.rayson.api.exception.ProtocolException;
+import org.rayson.api.http.HttpConstants;
+import org.rayson.api.http.HttpResponseStatus;
+import org.rayson.client.transport.ClientConnection;
+import org.rayson.share.client.HttpClientResponseBase;
+import org.rayson.share.util.HttpMessageParser;
+
+/**
+ * An tool used to read {@link HttpClientResponse} out of target
+ * {@link ClientConnection}.
+ * 
+ * @author Nick Zhang
+ *
+ */
+public class ClientResponseReader {
+	private static enum State {
+		BODY,
+		HEADERS,
+		NEW,
+		START_LINE;
+	}
+
+	private static final int BUFFER_SIZE = 10240;
+
+	private static final int EMPTY_LINE_FOUND = 0;
+	private static final int EOF = -1;
+	private static final int LINE_BUFFER_OVERFLOW = -2;
+	private static final int LINE_NOT_FOUND = -1;
+
+	private static final int MAX_BODY_LENGTH = 1024 * 100;
+	private static final int MAX_HEADER_LENGTH = 512;
+	private static final int MAX_STATUS_LINE_LENGTH = 1024;
+	private final ByteBuffer bb;
+
+	private final ClientConnection connection;
+	private int consumedIndex;
+	/**
+	 * An dummy byte buffer used to handle request with empty body.
+	 */
+	private final ByteBuffer emptyBodyBuffer = ByteBuffer.allocate(0);
+	private ByteBuffer lastBodyBuffer;
+
+	private HttpClientResponseBase lastMessage;
+
+	private final List<HttpClientResponse> receivedMsgs;
+
+	private State state;
+
+	/**
+	 * Construct a new reader with specified connection.
+	 * 
+	 * @param connection Client connection of the new reader.
+	 */
+	public ClientResponseReader(final ClientConnection connection) {
+		super();
+		this.connection = connection;
+		bb = ByteBuffer.allocate(BUFFER_SIZE);
+		receivedMsgs = new ArrayList<>();
+		state = State.NEW;
+	}
+
+	// /**
+	// * Take an line out of the underling buffer.
+	// *
+	// * @param count Bytes count, start from consumed position.
+	// * @return Line content data.
+	// */
+	// private byte[] consumeLine(final int count) {
+	// final byte[] dst = new byte[count];
+	// int dstI = 0;
+	// for (int i = consumedIndex; i < consumedIndex + count; i++) {
+	// dst[dstI++] = bb.get(i);
+	// }
+	// consumedIndex += (count + 2);
+	// return dst;
+	// }
+
+	/**
+	 * 
+	 * @return Count form consumed position to Next CRLF position, exclusive
+	 *         CRLF. Or {@value #LINE_NOT_FOUND}, if not found. Or
+	 *         {@value #LINE_BUFFER_OVERFLOW} , if the buffer is overflow.
+	 */
+	private int nextLineLength() {
+
+		if (bb.position() == consumedIndex) {
+			bb.clear();
+			consumedIndex = 0;
+			return LINE_NOT_FOUND;
+		}
+
+		int b;
+		for (int i = consumedIndex; i < bb.position() - 1; i++) {
+			b = bb.get(i);
+			if (b == HttpConstants.CR && bb.get(i + 1) == HttpConstants.LF) {
+				return i - consumedIndex;
+			}
+		}
+
+		if (!bb.hasRemaining())
+			return LINE_BUFFER_OVERFLOW;
+
+		return LINE_NOT_FOUND;
+	}
+
+	/**
+	 * Read HTTP response out of the underling channel reader.
+	 * 
+	 * @return Response list.Or <code>null</code> if no response yet.
+	 * @throws EOFException Reached end of stream.
+	 * @throws IOException If some other I/O error occurs.
+	 * @throws ProtocolException If the response data is malformed according to
+	 *             the communicating protocol.
+	 */
+	public HttpClientResponse[] read() throws IOException, EOFException, ProtocolException {
+
+		if (connection.getChannel().read(bb) == EOF)
+			throw new EOFException();
+
+		int nll;
+		OUTER: while (true) {
+
+			switch (state) {
+
+			case NEW:
+				lastMessage = new HttpClientResponseImpl();
+				state = State.START_LINE;
+
+			case START_LINE:
+				nll = nextLineLength();
+				switch (nll) {
+
+				case LINE_NOT_FOUND:
+
+					break OUTER;
+
+				case EMPTY_LINE_FOUND:
+					throw new ProtocolException(HttpResponseStatus.BAD_REQUEST.getReasonPhrase());
+
+				case LINE_BUFFER_OVERFLOW:
+					throw new ProtocolException(HttpResponseStatus.ENTITY_TOO_LARGE.getReasonPhrase());
+
+				default:
+					if (nll > MAX_STATUS_LINE_LENGTH) {
+						throw new ProtocolException(HttpResponseStatus.URI_TOO_LONG.getReasonPhrase());
+					}
+
+					lastMessage.setStartLine(HttpMessageParser.parseStatusLine(bb, consumedIndex, consumedIndex + nll));
+					consumedIndex += (nll + 2);
+					state = State.HEADERS;
+					break;
+				}
+
+			case HEADERS:
+				INNER: while (true) {
+					nll = nextLineLength();
+					switch (nll) {
+
+					case LINE_NOT_FOUND:
+						break OUTER;
+
+					case LINE_BUFFER_OVERFLOW:
+						throw new ProtocolException(HttpResponseStatus.ENTITY_TOO_LARGE.getReasonPhrase());
+
+					case EMPTY_LINE_FOUND:
+						consumedIndex += 2;
+						int bodyLen = lastMessage.getBodyLength();
+						if (bodyLen == 0) {
+							// Reference to dummy empty body buffer.
+							lastBodyBuffer = emptyBodyBuffer;
+
+						} else {
+							if (bodyLen > MAX_BODY_LENGTH) {
+								// handling too many content length error.
+								throw new ProtocolException(HttpResponseStatus.ENTITY_TOO_LARGE.getReasonPhrase());
+							}
+							lastBodyBuffer = ByteBuffer.allocate(bodyLen);
+						}
+
+						state = State.BODY;
+						break INNER;
+
+					default:
+						if (nll > MAX_HEADER_LENGTH)
+							throw new ProtocolException(HttpResponseStatus.HEADER_TOO_LARGE.getReasonPhrase());
+
+						lastMessage.addHeader(HttpMessageParser.parseHeader(bb, consumedIndex, consumedIndex + nll));
+						consumedIndex += (nll + 2);
+						break;
+					}
+				}
+
+			case BODY:
+
+				boolean bodyParsed = (lastBodyBuffer == emptyBodyBuffer);
+
+				if (!bodyParsed) {
+					final int count = Math.min(lastBodyBuffer.remaining(), bb.position() - consumedIndex);
+
+					if (count == 0) {
+						// No data to be consumed , we need to wait next read
+						// event.
+						return null;
+					}
+
+					for (int i = 0; i < count; i++) {
+						lastBodyBuffer.put(bb.get(consumedIndex++));
+					}
+
+					bodyParsed = !lastBodyBuffer.hasRemaining();
+				}
+
+				// All body data is parsed.
+				if (bodyParsed) {
+					lastMessage.setBody(lastBodyBuffer.array());
+					receivedMsgs.add(lastMessage);
+					state = State.NEW;
+
+				}
+				break;
+
+			default:
+				break;
+			}
+		}
+
+		if (receivedMsgs.isEmpty())
+			return null;
+		else {
+			final HttpClientResponse[] result = receivedMsgs.toArray(new HttpClientResponse[0]);
+			receivedMsgs.clear();
+			return result;
+		}
+	}
+
+	// /**
+	// * Build request result list read on server response error occurred.
+	// *
+	// * @param status Server response error status code.
+	// * @return Http client response list result.
+	// */
+	// private HttpClientResponse[] buildOnServerError(HttpResponseStatus
+	// status) {
+	// // Remove read selection key first.
+	// connection.getChannel().unInterestOps(SelectionKey.OP_READ);
+	//
+	// // Then build a client error request, and return all received requests.
+	// lastMessage.setServerProtocolError(status);
+	// receivedMsgs.add(lastMessage);
+	// final HttpClientResponse[] result = receivedMsgs.toArray(new
+	// HttpClientResponse[0]);
+	// receivedMsgs.clear();
+	// return result;
+	// }
+}

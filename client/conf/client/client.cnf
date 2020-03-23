@@ -1,0 +1,3 @@
+#Rayson client configuration file. In JAVA properties file format.
+
+ssl.truststore.password=creativor

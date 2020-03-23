@@ -1,0 +1,85 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<id>dist</id>
+	<formats>
+		<format>dir</format>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<moduleSets>
+		<!-- API -->
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<includes>
+				<include>org.rayson:rayson.api</include>
+			</includes>
+			<binaries>
+				<outputDirectory>api</outputDirectory>
+				<attachmentClassifier>assembly</attachmentClassifier>
+				<includeDependencies>false</includeDependencies>
+				<unpack>true</unpack>
+			</binaries>
+		</moduleSet>
+		<!--END API -->
+		<!-- CLIENT -->
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<includes>
+				<include>org.rayson:rayson.client</include>
+			</includes>
+			<binaries>
+				<outputDirectory>client</outputDirectory>
+				<attachmentClassifier>assembly</attachmentClassifier>
+				<includeDependencies>false</includeDependencies>
+				<unpack>true</unpack>
+			</binaries>
+		</moduleSet>
+		<!--END CLIENT -->
+		<!-- SERVER -->
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<includes>
+				<include>org.rayson:rayson.server</include>
+			</includes>
+			<binaries>
+				<outputDirectory>server</outputDirectory>
+				<attachmentClassifier>assembly</attachmentClassifier>
+				<includeDependencies>false</includeDependencies>
+				<unpack>true</unpack>
+			</binaries>
+		</moduleSet>
+		<!--END SERVER -->
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<includes>
+				<include>org.rayson:rayson.apt</include>
+			</includes>
+			<binaries>
+				<outputDirectory>tool</outputDirectory>
+				<includeDependencies>false</includeDependencies>
+				<unpack>false</unpack>
+			</binaries>
+		</moduleSet>
+
+	</moduleSets>
+	<dependencySets>
+		<dependencySet>
+			<includes>
+				<include>org.rayson:rayson.tools</include>
+				<include>org.rayson:rayson.demo</include>
+			</includes>
+			<outputDirectory>tool</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>..</directory>
+			<includes>
+				<include>LICENSE.txt</include>
+				<include>README.*</include>
+			</includes>
+			<useDefaultExcludes>true</useDefaultExcludes>
+		</fileSet>
+	</fileSets>
+</assembly>

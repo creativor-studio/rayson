@@ -1,0 +1,3 @@
+#Rayson server configuration file. In JAVA properties file format.
+
+ssl.keystore.password=creativor

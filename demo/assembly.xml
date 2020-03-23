@@ -1,0 +1,44 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<id>assembly</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+
+	<moduleSets>
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
+			<includes>
+				<include>org.rayson:rayson.demo</include>
+			</includes>
+			<binaries>
+				<outputDirectory>sources</outputDirectory>
+				<attachmentClassifier>sources</attachmentClassifier>
+				<includeDependencies>false</includeDependencies>
+				<unpack>false</unpack>
+			</binaries>
+		</moduleSet>
+	</moduleSets>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>bin</outputDirectory>
+			<useProjectArtifact>true</useProjectArtifact>
+			<scope>runtime</scope>
+		</dependencySet>
+	</dependencySets>
+
+	<fileSets>
+		<fileSet>
+			<includes>
+				<include>conf/**</include>
+				<include>lib/**</include>
+				<include>misc/**</include>
+				<include>script/**</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+
+</assembly>

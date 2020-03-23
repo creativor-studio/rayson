@@ -1,0 +1,4 @@
+.settings/
+generated_src/
+.DS_Store
+target/

@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.rayson</groupId>
+		<artifactId>rayson</artifactId>
+		<version>1.0.0-BETA</version>
+	</parent>
+
+	<artifactId>rayson.distribution</artifactId>
+	<packaging>pom</packaging>
+	<name>rayson distribution module</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.rayson</groupId>
+			<artifactId>rayson.tools</artifactId>
+			<classifier>assembly</classifier>
+			<version>1.0.0-BETA</version>
+			<type>zip</type>
+		</dependency>
+		<dependency>
+			<groupId>org.rayson</groupId>
+			<artifactId>rayson.demo</artifactId>
+			<classifier>assembly</classifier>
+			<version>1.0.0-BETA</version>
+			<type>zip</type>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>distro-assembly</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>assembly.xml</descriptor>
+							</descriptors>
+							<finalName>${project.parent.artifactId}-${project.version}</finalName>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

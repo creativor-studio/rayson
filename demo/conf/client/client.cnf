@@ -1,0 +1,4 @@
+#Rayson client configuration file. In JAVA properties file format.
+#ssl.enabled=true
+#http.content.type=application/x-www-form-urlencoded
+ssl.truststore.password=creativor

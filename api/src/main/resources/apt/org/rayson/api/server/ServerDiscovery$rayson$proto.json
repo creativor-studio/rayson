@@ -1,0 +1,52 @@
+{
+    "version": "1.0",
+    "name": "org.rayson.api.server.ServerDiscovery",
+    "comment": " Show Rayson server information discovery.\n \n @author creativor\n",
+    "methods": [
+        {
+            "name": "showProtocol",
+            "comment": " @throws IOException If network error occurred.\r\n",
+            "returnType": "org.rayson.api.protocol.info.ProtocolInfo",
+            "returnComment": null,
+            "annotations": [
+            ],
+            "parameters": [
+                {
+                    "name": "namespace",
+                    "index": 0,
+                    "comment": null
+                }
+            ]
+        },
+        {
+            "name": "touch",
+            "comment": " @throws IOException If network error occurred.\r\n",
+            "returnType": "void",
+            "returnComment": null,
+            "annotations": [
+            ],
+            "parameters": [
+            ]
+        },
+        {
+            "name": "show",
+            "comment": " @throws IOException If network error occurred.\r\n",
+            "returnType": "org.rayson.api.protocol.info.ServerInfo",
+            "returnComment": null,
+            "annotations": [
+            ],
+            "parameters": [
+            ]
+        },
+        {
+            "name": "listProtocols",
+            "comment": " @throws IOException If network error occurred.\r\n",
+            "returnType": "org.rayson.api.protocol.info.ProtocolInfo[]",
+            "returnComment": null,
+            "annotations": [
+            ],
+            "parameters": [
+            ]
+        }
+    ]
+}
