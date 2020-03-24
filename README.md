@@ -111,16 +111,16 @@ CPU: 2 GHz Intel Core i5 2 Cores
 Memory: 8 GB 1867 MHz LPDDR3 
 - **Testing result**
 
-| Threads | Call/Per Thread  |Requests/second|
+| Threads | Call(Per Thread) |Requests/Second|
 |:-------:|:----------------:|:-------------:|
-|  1      |   1000           |      1062     |
-|  5      |   1000           |      714      |
-|  1      |   10000          |      3650     |
-|  5      |   10000          |      3731     |
+|  1      |   1000           |      1429     |
+|  5      |   1000           |      1000     |
+|  1      |   10000          |      4274     |
+|  5      |   10000          |      2421     |
 |  50     |   10000          |      430      |
 |  1      |   100000         |      7576     |
 |  5      |   100000         |      3968     |
-|  50     |   100000         |      521      |
+|  50     |   100000         |      545      |
 
 * * *
 <center>Copyright Creativor Studio&copy; 2020</center>

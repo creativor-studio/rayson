@@ -23,6 +23,7 @@ final class ProfilerParameters implements ConsoleParameters {
 	private UrlArgument url;
 	private boolean usingSsl = false;
 	private boolean verify;
+	private boolean standaloneServer = false;
 	private HttpContentType contentType = HttpContentType.RSON;
 
 	/**
@@ -65,6 +66,13 @@ final class ProfilerParameters implements ConsoleParameters {
 	 */
 	public boolean isDebug() {
 		return debug;
+	}
+
+	/**
+	 * @return <code>true</code> If start a stand alone server.
+	 */
+	public boolean isStandaloneServer() {
+		return standaloneServer;
 	}
 
 	/**
@@ -111,6 +119,13 @@ final class ProfilerParameters implements ConsoleParameters {
 	}
 
 	/**
+	 * Make standalone server to be <code>true</code>.
+	 */
+	public void setStandaloneServer() {
+		this.standaloneServer = true;
+	}
+
+	/**
 	 * @param threadCount the threadCount to set
 	 */
 	void setThreadCount(int threadCount) {
@@ -138,8 +153,8 @@ final class ProfilerParameters implements ConsoleParameters {
 	@Override
 	public String toString() {
 		final StringBuffer sb = new StringBuffer();
-		Object[] values = { threadCount, callCount, contentType, serverAddress, debug, usingSsl };
-		String[] keys = { "threadCount", "callCount", "contentType", "serverAddress", "debug", "usingSsl" };
+		Object[] values = { threadCount, callCount, contentType, serverAddress, debug, usingSsl, standaloneServer };
+		String[] keys = { "threadCount", "callCount", "contentType", "serverAddress", "debug", "usingSsl", "standalone" };
 		int keyLen = keys.length;
 		sb.append("{");
 		for (int i = 0; i < keyLen; i++) {

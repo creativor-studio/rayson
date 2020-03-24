@@ -21,7 +21,7 @@ public class SslOptionDef extends ConsoleOptionDef<SslOption> {
 
 	@Override
 	public boolean match(String option) {
-		return "-s".equalsIgnoreCase(option);
+		return "-s".equalsIgnoreCase(option) || "--ssl".equalsIgnoreCase(option);
 	}
 
 	@Override

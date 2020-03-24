@@ -36,7 +36,7 @@ import org.rayson.tools.profiler.rpc.ProfilerProtocol;
  * @author creativor
  */
 @ConsoleConfig(arugments = { UrlArgumentDef.class }, options = { ThreadCountDef.class, CallCountDef.class, ContentTypeDef.class, DebugDef.class,
-		SslOptionDef.class, VerifyDef.class })
+		SslOptionDef.class, VerifyDef.class, StandaloneServerDef.class })
 public class Console extends RConsole<ProfilerParameters> {
 
 	private static class ProfilerImpl implements ProfilerProtocol {
@@ -199,8 +199,6 @@ public class Console extends RConsole<ProfilerParameters> {
 		} catch (final ConsoleException | InterruptedException e) {
 			console.printMsg(MessageType.ERROR, e.getMessage());
 		}
-
-		System.exit(0);
 	}
 
 	private CountDownLatch countDownLatch;
@@ -230,6 +228,11 @@ public class Console extends RConsole<ProfilerParameters> {
 			}
 		}
 
+		if (getParameters().isStandaloneServer()) {
+			printMsg("Runing in standalone server mode ...");
+			return;
+		}
+
 		int threadCount = getParameters().getThreadCount();
 		// 1. Setup profiling environment.
 
@@ -254,6 +257,9 @@ public class Console extends RConsole<ProfilerParameters> {
 
 		// 4. Report the result.
 		reporter.report();
+
+		// 5. Exit.
+		System.exit(0);
 	}
 
 	private void setupBuiltinServer()
@@ -271,6 +277,7 @@ public class Console extends RConsole<ProfilerParameters> {
 
 	@Override
 	protected String usage() {
-		return SCRIPT_NAME + " [-e] [-n thread_count] [-c call_count_each_thread] [-ct http_content_type] [-v] [serverIp:serverPort]";
+		return SCRIPT_NAME
+				+ "[-sa (or --standalone for standalone server mode)] [-e] [-n thread_count] [-c call_count_each_thread] [-ct http_content_type] [-v] [serverIp:serverPort]";
 	}
 }
