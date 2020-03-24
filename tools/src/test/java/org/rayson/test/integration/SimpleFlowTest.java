@@ -5,9 +5,12 @@
 
 package org.rayson.test.integration;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,13 +32,12 @@ import org.rayson.api.exception.RpcException;
 import org.rayson.api.http.HttpConstants;
 import org.rayson.api.http.HttpContentType;
 import org.rayson.api.http.HttpMessage;
-import org.rayson.api.protocol.info.ProtocolInfo;
-import org.rayson.api.protocol.info.ServerInfo;
-import org.rayson.api.server.ServerDiscovery;
 import org.rayson.client.ClientSystem;
-import org.rayson.client.Rayson;
 import org.rayson.share.http.HttpHeaderImpl;
 import org.rayson.share.serial.ContentCoderFactory;
+import org.rayson.test.integration.protocol.TestProtocol;
+import org.rayson.test.integration.protocol.TestService;
+import org.rayson.test.integration.protocol.TestStruct;
 
 /**
  * An simple testing implements {@link BaseFlowTest}.
@@ -46,7 +48,7 @@ import org.rayson.share.serial.ContentCoderFactory;
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({ ContentCoderFactory.class, ClientSystem.class })
 @PowerMockIgnore({ "org.apache.http.conn.ssl.*", "javax.net.ssl.*", "javax.crypto.*" })
-public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
+public class SimpleFlowTest extends BaseFlowTest<TestProtocol> {
 
 	private static class ContentTypeFilter implements HttpClientFilter {
 
@@ -69,6 +71,71 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 
 		}
 
+	}
+
+	@Override
+	protected TestProtocol createService() {
+		return new TestService();
+	}
+
+	/**
+	 * Do test all kinds of serialization.
+	 */
+	private void doTestSerialization() {
+		try {
+			// Test string.
+			String str = "hello world";
+			Object strr = getProxy().echo(str);
+			assertEquals(str, strr);
+
+			// Test byte array.
+			byte[] sr2 = getProxy().echoBytes(str.getBytes());
+			assertTrue(Arrays.equals(str.getBytes(), sr2));
+
+			// Test byte.
+			byte b = 3;
+			byte br = getProxy().echoByte(b);
+			assertEquals(b, br);
+
+			// Test short.
+			short s = 3;
+			short sr = getProxy().echoShort(s);
+			assertEquals(s, sr);
+
+			// Test iterger.
+			int i = 3;
+			int ir = getProxy().echoInt(i);
+			assertEquals(i, ir);
+
+			// Test double.
+			double d = 3.23;
+			double dr = getProxy().echoDouble(d);
+			assertTrue(d == dr);
+
+			// Test long.
+			long l = (long) 3.345;
+			long lr = getProxy().echoLong(l);
+			assertEquals(l, lr);
+
+			// Test long.
+			float f = 3.345f;
+			float fr = getProxy().echoFloat(f);
+			assertTrue(f == fr);
+
+			// Test multiple parameters.
+			String str1 = "one";
+			int int2 = 22;
+			String concatRes = getProxy().concat(str1, int2);
+			assertEquals(concatRes, str1 + Integer.toString(int2));
+
+			// Test structure.
+			TestStruct testStruct = new TestStruct(12, false, "adfs", 345);
+			TestStruct structR = getProxy().echoBean(testStruct);
+			assertEquals(testStruct, structR);
+
+		} catch (Exception e) {
+			fail("doTestSerialization got error: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -98,9 +165,9 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 			});
 			PowerMockito.mockStatic(ClientSystem.class);
 			PowerMockito.when(ClientSystem.getSystem()).thenReturn(mockClient);
-			String namespace = ServerDiscovery.class.getName();
-			ProtocolInfo info = getProxy().showProtocol(namespace);
-			Assert.assertEquals(info.getName(), namespace);
+
+			doTestSerialization();
+
 			Mockito.reset();
 
 		} catch (Throwable e) {
@@ -136,9 +203,9 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 			});
 			PowerMockito.mockStatic(ClientSystem.class);
 			PowerMockito.when(ClientSystem.getSystem()).thenReturn(mockClient);
-			String namespace = ServerDiscovery.class.getName();
-			ProtocolInfo info = getProxy().showProtocol(namespace);
-			Assert.assertEquals(info.getName(), namespace);
+
+			doTestSerialization();
+
 			Mockito.reset();
 
 		} catch (Throwable e) {
@@ -174,9 +241,9 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 			});
 			PowerMockito.mockStatic(ClientSystem.class);
 			PowerMockito.when(ClientSystem.getSystem()).thenReturn(mockClient);
-			String namespace = ServerDiscovery.class.getName();
-			ProtocolInfo info = getProxy().showProtocol(namespace);
-			Assert.assertEquals(info.getName(), namespace);
+
+			doTestSerialization();
+
 			Mockito.reset();
 
 		} catch (Throwable e) {
@@ -187,8 +254,7 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 
 	@Test
 	public void testSerialization() throws IOException, RpcException {
-		ServerInfo serverInfo = getProxy().show();
-		Assert.assertEquals(serverInfo.getPortNumber(), Rayson.getProxy(getProxy()).getServerAddr().getPort());
+		doTestSerialization();
 	}
 
 	@Test
@@ -198,15 +264,14 @@ public class SimpleFlowTest extends BaseFlowTest<ServerDiscovery> {
 			getProxy().touch();
 			Assert.assertTrue(true);
 		} catch (IOException | RpcException e) {
-			Assert.fail("touch rpc server using ssl failed: " + e.getMessage());
+			Assert.fail("touch rpc server failed: " + e.getMessage());
 		}
 	}
 
 	@Test
 	@TestStrategy(usingSsl = true)
 	public void testSslSerialization() throws IOException, RpcException {
-		ServerInfo serverInfo = getProxy().show();
-		Assert.assertEquals(serverInfo.getPortNumber(), Rayson.getProxy(getProxy()).getServerAddr().getPort());
+		doTestSerialization();
 	}
 
 	@Test
