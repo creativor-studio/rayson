@@ -22,7 +22,7 @@ public class InvalidApiException extends Exception {
 	/**
 	 * Construct a new exception.
 	 * 
-	 * @param method Java method which according to this error.
+	 * @param method Source Java method which cause this error.
 	 * @param message Error message.
 	 */
 	public InvalidApiException(@NotNull Method method, String message) {
@@ -31,7 +31,7 @@ public class InvalidApiException extends Exception {
 	}
 
 	/**
-	 * @return The target method which is not an validate one for Rayson API.
+	 * @return The source method which is not an validate one for Rayson API.
 	 */
 	public Method getMethod() {
 		return method;

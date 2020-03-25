@@ -8,6 +8,7 @@ package org.rayson.rson;
 
 import java.nio.charset.Charset;
 
+import org.rayson.api.annotation.ThreadSafe;
 import org.rayson.api.serial.ByteArrayInputBuffer;
 
 /**
@@ -15,12 +16,10 @@ import org.rayson.api.serial.ByteArrayInputBuffer;
  * most commonly used methods for creating these objects and their corresponding
  * factories. The factory classes provide all the various ways to create these
  * objects.
- *
  * 
- * All the methods in this class are safe for use by multiple concurrent
- * threads.
- *
+ * @author creativor
  */
+@ThreadSafe
 public class Rson {
 	/**
 	 * Default provider .

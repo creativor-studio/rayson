@@ -10,8 +10,8 @@ import org.rayson.api.server.ServerResponse;
 /**
  * Defines an object to assist a service in sending a response to the client.
  * The server creates a {@link ServerResponse} object and passes it as an
- * argument to the service's service method. There are two kinds of request in
- * both client side and server side.
+ * argument to the service's service method.<br>
+ * There are two kinds of request in both client side and server side.
  * <ul>
  * <li>Service response.</li>
  * <li>Http response.</li>

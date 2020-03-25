@@ -15,6 +15,7 @@ import org.rayson.api.serial.ByteArrayOutputBuffer;
 /**
  * Stands for an element of RSON.
  * 
+ * @see RsonType About supported element types.
  * @author creativor
  */
 public interface RsonElement extends BufferWritable {

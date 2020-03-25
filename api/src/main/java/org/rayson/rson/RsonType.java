@@ -12,47 +12,47 @@ package org.rayson.rson;
  */
 public enum RsonType {
 	/**
-	 * For null element.
+	 * An element stands for an <code>null</code> object.
 	 */
 	NULL(0),
 	/**
-	 * For <code>true</code> element.
+	 * An element stands for an boolean value <code>true</code>.
 	 */
 	TRUE(1),
 	/**
-	 * For <code>false</code> element.
+	 * An element stands for an boolean value <code>false</code>.
 	 */
 	FALSE(2),
 	/**
-	 * For byte element.
+	 * For an {@link Byte} element.
 	 */
 	BYTE(3),
 	/**
-	 * For short number element.
+	 * For an {@link Short} element.
 	 */
 	SHORT(4),
 	/**
-	 * For integer number element.
+	 * For an {@link Integer} element.
 	 */
 	INT(5),
 	/**
-	 * For float number element.
+	 * For an {@link Float} element.
 	 */
 	FLOAT(6),
 	/**
-	 * For long number element.
+	 * For an {@link Long} element.
 	 */
 	LONG(7),
 	/**
-	 * For double number element.
+	 * For an {@link Double} element.
 	 */
 	DOUBLE(8),
 	/**
-	 * For string element.
+	 * For an {@link String} element.
 	 */
 	STRING(16),
 	/**
-	 * For array element.
+	 * For an array element.
 	 */
 	ARRAY(32),
 	/**
@@ -61,7 +61,7 @@ public enum RsonType {
 	 */
 	BIG_ARRAY(33),
 	/**
-	 * For object element.
+	 * For an object element.
 	 */
 	OBJECT(64),
 	/**
@@ -70,7 +70,7 @@ public enum RsonType {
 	 */
 	BIG_OBJECT(65),
 	/**
-	 * For an byte array RSON element.
+	 * For an byte array element.
 	 */
 	BYTE_ARRAY(127);
 

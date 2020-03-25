@@ -10,8 +10,7 @@ import org.rayson.api.server.ServerRequest;
 /**
  * Defines an object to provide client request information to a service. The
  * server reates a {@link ServerRequest} object and passes it as an argument to
- * the service's method.
- * 
+ * the service's method. <br>
  * There are two kinds of request in both client side and server side.
  * <ul>
  * <li>Service request.</li>
