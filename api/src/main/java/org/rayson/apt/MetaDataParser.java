@@ -6,6 +6,7 @@
 package org.rayson.apt;
 
 import java.io.StringWriter;
+import java.lang.annotation.Documented;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -33,7 +34,6 @@ import javax.lang.model.util.AbstractElementVisitor7;
 import javax.tools.Diagnostic.Kind;
 
 import org.rayson.api.Protocol;
-import org.rayson.api.annotation.DocumentedAnnotation;
 import org.rayson.api.annotation.Nullable;
 import org.rayson.api.protocol.info.AnnotationInfo;
 import org.rayson.api.protocol.info.MethodInfo;
@@ -293,7 +293,7 @@ final class MetaDataParser {
 		try {
 			final List<? extends AnnotationMirror> ams = am.getAnnotationType().asElement().getAnnotationMirrors();
 			for (final AnnotationMirror a : ams) {
-				if (a.getAnnotationType().toString().equals(DocumentedAnnotation.class.getName()))
+				if (a.getAnnotationType().toString().equals(Documented.class.getName()))
 					return true;
 			}
 		} catch (final Exception e) {

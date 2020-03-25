@@ -7,15 +7,16 @@ package org.rayson.api.serial;
 
 import org.rayson.api.annotation.NotNull;
 import org.rayson.api.annotation.SerializedName;
+import org.rayson.rson.RsonElement;
 import org.rayson.rson.element.ObjectElement;
 
 /**
- * An interface which means that the object can be serialized to RSON element
- * and de-serialized from RSON element.<br>
+ * An interface which means that the object can be serialized to
+ * {@link RsonElement} and de-serialized from RSON element.<br>
  * By default, we using built-in strategy to serialize and de-serialize the
  * {@link RsonSerializable} objects. <br>
  * <p>
- * But we can also define different strategy by the following ways:<br>
+ * But we can also customize the strategy in the following ways:<br>
  * <br>
  * 
  * - Specified the serialize strategy: Implements interface
@@ -34,7 +35,7 @@ public interface RsonSerializable {
 	 */
 	public static interface ReadStrategy {
 		/**
-		 * Build this object from given Json value.
+		 * Build this object from giving Json value.
 		 * 
 		 * @param value Json format value to converted to java object.
 		 */

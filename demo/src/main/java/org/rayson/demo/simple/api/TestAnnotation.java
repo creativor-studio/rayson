@@ -4,13 +4,13 @@
  */
 package org.rayson.demo.simple.api;
 
-import org.rayson.api.annotation.DocumentedAnnotation;
+import java.lang.annotation.Documented;
 
 /**
  * @author Nick Zhang
  *
  */
-@DocumentedAnnotation
+@Documented
 public @interface TestAnnotation {
 	public String value();
 }

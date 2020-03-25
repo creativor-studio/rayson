@@ -11,17 +11,17 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.rayson.api.serial.RsonSerializable;
+import org.rayson.rson.RsonElement;
 
 /**
- * An annotation that indicates this member should be serialized to JSON with
- * the provided name value as its field name.
+ * An annotation that indicates the target member should be serialized to
+ * {@link RsonElement} with the provided name value as its field name.
  * 
  * @author Nick Zhang
  * @see RsonSerializable About how to serialize objects to JSON.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ ElementType.FIELD, ElementType.PARAMETER })
-@DocumentedAnnotation
 public @interface SerializedName {
 	/**
 	 * @return New field name used to serialize target field to Json string.

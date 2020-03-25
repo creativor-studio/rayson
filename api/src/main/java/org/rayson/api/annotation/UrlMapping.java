@@ -13,8 +13,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Define the path of the target method or class on specified Rayson service.
- * TODO: Add the mapping rule description.
+ * Define the API path of the target method or class on specified Rayson
+ * service. TODO: Add the mapping rule description.
  * 
  * @author creativor
  */

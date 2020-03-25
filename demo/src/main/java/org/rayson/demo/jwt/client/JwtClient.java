@@ -20,7 +20,7 @@ public class JwtClient {
 
 	public static void main(final String[] args) throws IllegalArgumentException, UnknownHostException {
 
-		final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080, true);
+		final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
 		ProxyConfig config = new ProxyConfig();
 		config.addHttpFilter(ClientAuthHttpFilter.class);
 		JwtProtocol testProtocol;

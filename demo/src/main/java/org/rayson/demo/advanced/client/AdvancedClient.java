@@ -20,7 +20,7 @@ import org.rayson.demo.advanced.api.SerialObject;
 public class AdvancedClient {
 	public static void main(final String[] args) throws IllegalArgumentException, UnknownHostException {
 
-		final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080, true);
+		final RaysonServerAddress serverAddr = new RaysonServerAddress("localhost", 8080);
 		ProxyConfig config = new ProxyConfig();
 		config.addFilter(ClientLogFilter.class);
 		config.addHttpFilter(ClientAuthHttpFilter.class);
