@@ -13,7 +13,7 @@ import org.rayson.api.server.exception.DuplicateServiceException;
 import org.rayson.api.server.exception.ServiceException;
 
 /**
- * Server provide {@link Service}s.
+ * Rayson API Server interface, which provide {@link Service}s.
  * 
  * @author Nick Zhang
  *

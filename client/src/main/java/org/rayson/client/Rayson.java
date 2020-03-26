@@ -17,17 +17,9 @@ import org.rayson.api.exception.InvalidApiException;
  * Rayson client.
  * 
  * @author creativor
+ * @see Proxy About RPC invoking proxy.
  */
 public final class Rayson {
-	/**
-	 * Setup global configuration of this Rayson client system.
-	 * 
-	 * @param config Client system configuration to set.
-	 */
-	public static void setConfig(@NotNull ClientConfig config) {
-		ClientSystem.getSystem().setConfig(config);
-	}
-
 	/**
 	 * Create an proxy of protocol.
 	 * 
@@ -61,8 +53,8 @@ public final class Rayson {
 	 *             API.
 	 * @see Proxy About proxy.
 	 */
-	public static <T extends Protocol> T createProxy(@NotNull final RaysonServerAddress serverAddr, @NotNull final Class<T> protocol, @Nullable final ProxyConfig config)
-			throws IllegalArgumentException, InvalidApiException {
+	public static <T extends Protocol> T createProxy(@NotNull final RaysonServerAddress serverAddr, @NotNull final Class<T> protocol,
+			@Nullable final ProxyConfig config) throws IllegalArgumentException, InvalidApiException {
 		ClientSystem.getSystem().lazyInit();
 		return ClientSystem.getSystem().getRpcManager().createProxy(serverAddr, protocol, config);
 	}
@@ -85,5 +77,14 @@ public final class Rayson {
 	@NotNull
 	public static Proxy getProxy(@NotNull Protocol proxy) throws IllegalArgumentException, SecurityException {
 		return ClientSystem.getSystem().getRpcManager().getProxy(proxy);
+	}
+
+	/**
+	 * Setup global configuration of this Rayson client system.
+	 * 
+	 * @param config Client system configuration to set.
+	 */
+	public static void setConfig(@NotNull ClientConfig config) {
+		ClientSystem.getSystem().setConfig(config);
 	}
 }

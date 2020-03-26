@@ -28,7 +28,9 @@ import org.rayson.api.Protocol;
  * <br>
  * - An initialized service implementation object, and registered into the
  * server, called Service Instance.<br>
- * 
+ *
+ * @see ServiceConfig About configure a service by annotation.
+ * @see UrlMapping About define the API path.
  * 
  * @author creativor
  */

@@ -32,6 +32,7 @@ import org.rayson.api.exception.ProtocolException;
  * client side filter itself got error when doing filter job.</li>
  * </ul>
  * 
+ * @see ProxyConfig About configure an proxy.
  * @author Nick Zhang
  */
 public interface Proxy {
