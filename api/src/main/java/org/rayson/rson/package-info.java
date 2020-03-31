@@ -10,8 +10,7 @@
  * 
  * <pre>
 <table border="1">
-	<caption>All <a href=
-"#serialTypes"> supported serializable types </a></caption>
+	<caption>All supported serializable types</caption>
     <tr>
         <th>Java Type</th>
         <th> {@link RsonType} </th>

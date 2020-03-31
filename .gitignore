@@ -1,4 +1,10 @@
+target/
+.checkstyle
+.classpath
+.factorypath
+.project
 .settings/
 generated_src/
+.apt_generated_tests/
+.apt_generated/
 .DS_Store
-target/
