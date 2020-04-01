@@ -57,19 +57,34 @@
         <td> </td>
     </tr>
     <tr>
+        <td> {@link Double} </td>
+        <td> {@link RsonType#DOUBLE} </td>
+        <td> </td>
+    </tr>
+    <tr>
         <td>{@link String} or {@link Enum} </td>
         <td> {@link RsonType#STRING} </td>
         <td> Only simple {@link Enum} is supported </td>
     </tr>
     <tr>
         <td>array list</td>
-        <td> {@link RsonType#ARRAY} or {@link RsonType#BIG_ARRAY} </td>
-        <td> </td>
+        <td> {@link RsonType#ARRAY}</td>
+        <td> The array item type is serializable</td>
+    </tr>
+    <tr>
+        <td>array list</td>
+        <td>{@link RsonType#BIG_ARRAY} </td>
+        <td> Items count larger than 127.</td>
     </tr>
     <tr>
         <td> {@link org.rayson.api.serial.RsonSerializable} </td>
-        <td> {@link RsonType#OBJECT} or {@link RsonType#BIG_OBJECT}</td>
+        <td> {@link RsonType#OBJECT}</td>
         <td> All fields can be serialized  </td>
+    </tr>
+    <tr>
+        <td> {@link org.rayson.api.serial.RsonSerializable} </td>
+        <td> {@link RsonType#BIG_OBJECT}</td>
+        <td> All fields can be serialized, and fields count larger than 127 </td>
     </tr>
     <tr>
         <td>byte array</td>

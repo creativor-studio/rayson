@@ -10,7 +10,6 @@ import org.rayson.api.client.HttpClientResponse;
 import org.rayson.api.client.HttpFilterChain;
 import org.rayson.api.client.Proxy;
 import org.rayson.api.exception.ClientFilterException;
-import org.rayson.api.http.HttpHeader;
 
 /**
  * @author Nick Zhang
