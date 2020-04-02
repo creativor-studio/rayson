@@ -9,6 +9,7 @@ import java.io.IOException;
 
 import org.rayson.api.annotation.ServiceConfig;
 import org.rayson.api.exception.RpcException;
+import org.rayson.api.server.RpcContext;
 import org.rayson.demo.advanced.api.AdvancedProtocol;
 import org.rayson.demo.advanced.api.SerialObject;
 
@@ -21,6 +22,7 @@ public class AdvancedService implements AdvancedProtocol {
 
 	@Override
 	public String echo(final String msg) throws IOException {
+		String userId = (String) RpcContext.getContext().getAttribute("userId");
 		return msg;
 	}
 

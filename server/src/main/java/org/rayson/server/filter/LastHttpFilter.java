@@ -5,7 +5,7 @@
 
 package org.rayson.server.filter;
 
-import java.lang.reflect.Method;
+import java.lang.reflect.Field;
 
 import org.rayson.api.Protocol;
 import org.rayson.api.http.HttpResponseStatus;
@@ -17,7 +17,6 @@ import org.rayson.api.server.HttpServerRequest;
 import org.rayson.api.server.HttpServerResponse;
 import org.rayson.api.server.RpcContext;
 import org.rayson.api.server.Server;
-import org.rayson.api.server.ServerRequest;
 import org.rayson.api.server.exception.ServiceException;
 import org.rayson.server.http.HttpServerRequestImpl;
 import org.rayson.server.http.HttpServerResponseImpl;
@@ -32,16 +31,13 @@ import org.slf4j.Logger;
  * 
  */
 class LastHttpFilter implements HttpServerFilter {
-	private static final Method CLEAR_RPC_CONTEXT_METHOD;
-	private static final Method SET_RPC_CONTEXT_METHOD;
+	private static final Field SET_RPC_CONTEXT_REQUEST_FIELD;
 	private static final Logger LOG = RaysonLoggerFactory.getLogger(LastHttpFilter.class);
 
 	static {
 		try {
-			SET_RPC_CONTEXT_METHOD = RpcContext.class.getDeclaredMethod("setupContext", ServerRequest.class);
-			SET_RPC_CONTEXT_METHOD.setAccessible(true);
-			CLEAR_RPC_CONTEXT_METHOD = RpcContext.class.getDeclaredMethod("clearContext");
-			CLEAR_RPC_CONTEXT_METHOD.setAccessible(true);
+			SET_RPC_CONTEXT_REQUEST_FIELD = RpcContext.class.getDeclaredField("request");
+			SET_RPC_CONTEXT_REQUEST_FIELD.setAccessible(true);
 		} catch (Exception e) {
 			throw new RuntimeException("Failed to found context setting methods in " + RpcContext.class, e);
 		}
@@ -85,14 +81,12 @@ class LastHttpFilter implements HttpServerFilter {
 			// Setup service request first.
 			serviceRequest.setupRpcParams(service, protocolMirror, methodMirror);
 
-			// Setup RPC context.
-			SET_RPC_CONTEXT_METHOD.invoke(null, serviceRequest);
-			try {
-				// Do service filter.
-				serviceChain.doFilter(serviceRequest, serviceResponse);
-			} finally {
-				CLEAR_RPC_CONTEXT_METHOD.invoke(null);
-			}
+			// Setup RPC context request attribute.
+			SET_RPC_CONTEXT_REQUEST_FIELD.set(RpcContext.getContext(), serviceRequest);
+
+			// Do service filter.
+			serviceChain.doFilter(serviceRequest, serviceResponse);
+
 		} catch (ServiceException e) {
 			response.setException(HttpResponseStatus.SERVICE_UNAVAILABLE, e.getMessage());
 			return;
