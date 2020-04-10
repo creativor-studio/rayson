@@ -48,19 +48,7 @@ import com.sun.tools.javac.util.Name;
 import com.sun.tools.javac.util.Names;
 
 /**
- * Annotation processor used to process Rayson Protocol service class.<br>
- * Notes, we can debug this processor by running javac as the following command
- * line shows:
- * 
- * <pre>
- * <b>
- * javac -processorpath Rayson-apt.jar -processor org.rayson.tool.apt.AnnotationProcessor \
- *  -J-Xdebug -J-Xrunjdwp:transport=dt_socket,address=9999,server=y,suspend=y Test.java
- * </b>
- * </pre>
- * 
- * Then, we can debug this processor by debugging remote java application on
- * Port 9999 in the IDE.
+ * Annotation processor used to process Rayson Protocol service class.
  * 
  * @author creativor
  */
@@ -143,7 +131,7 @@ public class AnnotationProcessor extends AbstractProcessor {
 	}
 
 	private void generateMetaData(final TypeElement protocolType) throws IOException, JsonException {
-		
+
 		final MetaDataParser parser = new MetaDataParser(protocolType, this.processingEnv);
 		final String packageName = parser.getPackageName();
 
@@ -189,7 +177,6 @@ public class AnnotationProcessor extends AbstractProcessor {
 
 		MyTreeVistor visitor = new MyTreeVistor();
 		tree.accept(visitor, null);
-
 
 		final ElementKind kind = element.getKind();
 		final TypeKind typeKind = elementType.getKind();

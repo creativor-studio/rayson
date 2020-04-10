@@ -151,7 +151,7 @@ public class ServiceManagerImpl implements ServiceManager {
 	@Override
 	public HttpServerResponse doFilter(@NotNull final HttpServerRequest request) throws ServiceException {
 
-		LOGGER.debug("Invoking request " + request);
+		//LOGGER.debug("Invoking request " + request);
 
 		HttpServerRequestImpl realReq = (HttpServerRequestImpl) request;
 

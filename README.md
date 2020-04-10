@@ -88,7 +88,7 @@ public static void main(final String[] args) throws Exception {
 
 1.  Bash script invoking by curl
 ```bash
-curl -v "http://localhost:8080/org.rayson.demo.simple.api.SimpleProtocol/echo?Hello%20World"
+curl -v "http://localhost:8080/org.rayson.demo.simple.api.SimpleProtocol/echo?msg=Hello%20World"
 > GET /org.rayson.demo.simple.api.SimpleProtocol/echo?msg=Hello%20World HTTP/1.1
 > Host: localhost:8080
 > User-Agent: curl/7.64.1
