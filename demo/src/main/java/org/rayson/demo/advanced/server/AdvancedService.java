@@ -12,6 +12,7 @@ import org.rayson.api.exception.RpcException;
 import org.rayson.api.server.RpcContext;
 import org.rayson.demo.advanced.api.AdvancedProtocol;
 import org.rayson.demo.advanced.api.SerialObject;
+import org.rayson.rson.element.ObjectElement;
 
 /**
  *
@@ -28,6 +29,11 @@ public class AdvancedService implements AdvancedProtocol {
 
 	@Override
 	public SerialObject echo2(SerialObject msg) throws IOException, RpcException {
+		return msg;
+	}
+
+	@Override
+	public ObjectElement echoRson(ObjectElement msg) throws IOException, RpcException {
 		return msg;
 	}
 

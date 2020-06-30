@@ -5,11 +5,14 @@
 
 package org.rayson.demo.advanced.client;
 
+import org.glassfish.json.JsonUtil;
 import org.rayson.api.client.ProxyConfig;
 import org.rayson.api.client.RaysonServerAddress;
 import org.rayson.client.Rayson;
 import org.rayson.demo.advanced.api.AdvancedProtocol;
 import org.rayson.demo.advanced.api.SerialObject;
+import org.rayson.rson.element.ObjectElement;
+import org.rayson.share.serial.rson.RsonUtil;
 
 /**
  *
@@ -35,6 +38,14 @@ public class AdvancedClient {
 		SerialObject response = testProtocol.echo2(msg);
 		System.out.println(response);
 		if (!response.equals(msg)) {
+			System.err.println("Message " + msg + " not equals to the response " + response);
+		}
+
+		String jsonString = "{\"a\":\"b\",\"c\":3}";
+		ObjectElement rsonMsg = (ObjectElement) RsonUtil.fromJson(JsonUtil.toJson(jsonString));
+		ObjectElement rsonResp = testProtocol.echoRson(rsonMsg);
+		System.out.println(rsonResp);
+		if (!rsonResp.equals(rsonMsg)) {
 			System.err.println("Message " + msg + " not equals to the response " + response);
 		}
 	}
