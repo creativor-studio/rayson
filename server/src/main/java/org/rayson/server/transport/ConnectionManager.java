@@ -62,7 +62,7 @@ public class ConnectionManager implements Manager, Runnable {
 
 	private void doClose(final ServerConnection conn) {
 
-		LOGGER.info("Closing " + conn + " ...");
+		LOGGER.debug("Closing " + conn + " ...");
 		try {
 			conn.close();
 		} catch (final Throwable e) {

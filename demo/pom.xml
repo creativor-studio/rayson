@@ -14,6 +14,14 @@
 	<properties>
 	</properties>
 	<dependencies>
+	
+		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+		<dependency>
+			<groupId>com.squareup.okhttp3</groupId>
+			<artifactId>okhttp</artifactId>
+			<version>4.9.2</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.rayson</groupId>
 			<artifactId>rayson.server</artifactId>

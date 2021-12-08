@@ -147,7 +147,7 @@ public class ServerRequestImpl implements ServerRequest {
 		this.methodMirror = methodMirror;
 		this.protocolMirror = protocolMirror;
 
-		ObjectElement rson = ContentCoderFactory.get(httpRequst.getContentType()).decodeRequest(httpRequst, charset);
+		ObjectElement rson = ContentCoderFactory.get(httpRequst.getContentType()).decodeRequest(httpRequst, charset,this.methodMirror);
 		this.parameters = RsonUtil.paserRpcRequest(rson, methodMirror);
 	}
 

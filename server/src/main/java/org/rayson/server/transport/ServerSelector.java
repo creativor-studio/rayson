@@ -94,7 +94,7 @@ public class ServerSelector extends NioSelectorBase implements Manager, NioSelec
 			final ServerConnection connection = container.getConnectionManager().newConnection(nioChannel);
 			newKey.attach(connection);
 			container.getConnectionManager().put(connection);
-			LOGGER.info("new connection: " + connection + " accepted.");
+			LOGGER.debug("new connection: " + connection + " accepted.");
 
 		} catch (final Throwable e) {
 			LOGGER.error("Accept new connection error", e);
