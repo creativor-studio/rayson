@@ -90,7 +90,7 @@ public interface ByteArrayOutputBuffer {
 	 * @param buffer Target data source buffer.
 	 * @param value Value to be written to target buffer.
 	 */
-	public static void writeShort(@NotNull final ByteArrayOutputBuffer buffer, final short value) {
+	public static void writeShort(@NotNull final ByteArrayOutputBuffer buffer, final int value) {
 
 		buffer.write(value >>> 8 & 0xFF);
 		buffer.write(value >>> 0 & 0xFF);

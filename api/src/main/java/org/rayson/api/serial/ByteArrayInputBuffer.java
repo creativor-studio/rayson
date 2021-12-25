@@ -6,6 +6,7 @@
 package org.rayson.api.serial;
 
 import java.io.EOFException;
+import java.io.IOException;
 
 import org.rayson.api.annotation.NotNull;
 
@@ -114,7 +115,7 @@ public interface ByteArrayInputBuffer {
 	 * @exception EOFException If this buffer has reached the end.
 	 * @return the next byte of data.
 	 */
-	public byte read() throws EOFException;
+	public int read() throws EOFException;
 
 	/**
 	 * Reads up to <code>len</code> bytes of data into an array of bytes from
